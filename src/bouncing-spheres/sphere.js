@@ -1,5 +1,5 @@
 import {
-  bounceOnBorderCollision,
+  sphereBounceOnBorderCollision,
   bounceOnSphereCollision,
   distance,
   getRandomInt
@@ -17,21 +17,27 @@ export default class Sphere {
       x: getRandomInt(1, 4),
       y: getRandomInt(1, 4)
     };
+    this.counter = 0;
   }
 
-  update(ctx, mouse = {}, allSpheres = []) {
+  update(ctx, mouse = {}, allObjects = []) {
     // borders collision
-    bounceOnBorderCollision(ctx, this);
+    sphereBounceOnBorderCollision(ctx, this);
 
-    // other sphere collisions
-    for (let otherSphere of allSpheres) {
-      // ignore if is the "this" sphere
-      if (this.x === otherSphere.x) {
+    // other obj collisions
+    for (let otherObj of allObjects) {
+      // ignore if is the "this" obj
+      if (this.x === otherObj.x) {
         continue;
       }
 
-      if (distance(this, otherSphere) - this.radius * 2 < 0) {
-        bounceOnSphereCollision(this, otherSphere);
+      if (distance(this, otherObj) - this.radius * 2 < 0) {
+        // increment counter
+        this.counter += 1;
+        otherObj.counter += 1;
+
+        // bounce
+        bounceOnSphereCollision(this, otherObj);
       }
     }
 
@@ -52,9 +58,12 @@ export default class Sphere {
     ctx.beginPath();
     ctx.strokeStyle = `rgb(${r}, ${g}, ${b}, 1)`;
     ctx.fillStyle = `rgb(${r}, ${g}, ${b}, ${this.opacity})`;
-    ctx.arc(this.x, this.y, this.radius, Math.PI * 2, false);
+    ctx.arc(this.x, this.y - 4, this.radius, Math.PI * 2, false);
     ctx.stroke();
     ctx.fill();
+    ctx.fillStyle = `rgb(${r}, ${g}, ${b}, 1)`;
+    ctx.textAlign = "center";
+    ctx.fillText(this.counter, this.x, this.y, 20);
     ctx.closePath();
   }
 }

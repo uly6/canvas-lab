@@ -40,7 +40,7 @@ export function drawGrid(ctx) {
 // COLLISION
 // -----------------------------------------------------------------
 
-export function bounceOnBorderCollision(ctx, sphere) {
+export function sphereBounceOnBorderCollision(ctx, sphere) {
   const {
     canvas: { width, height }
   } = ctx;
@@ -72,6 +72,42 @@ export function bounceOnBorderCollision(ctx, sphere) {
   if (x + radius >= width) {
     if (Math.sign(sphere.speed.x) === 1) {
       sphere.speed.x = -sphere.speed.x;
+    }
+  }
+}
+
+export function rectBounceOnBorderCollision(ctx, rect) {
+  const {
+    canvas: { width: canvasWidth, height: canvasHeight }
+  } = ctx;
+
+  const { x, y, width, height } = rect;
+
+  // top collision
+  if (y <= 0) {
+    if (Math.sign(rect.speed.y) === -1) {
+      rect.speed.y = -rect.speed.y;
+    }
+  }
+
+  // bottom collision
+  if (y + height >= canvasHeight) {
+    if (Math.sign(rect.speed.y) === 1) {
+      rect.speed.y = -rect.speed.y;
+    }
+  }
+
+  // left collision
+  if (x <= 0) {
+    if (Math.sign(rect.speed.x) === -1) {
+      rect.speed.x = -rect.speed.x;
+    }
+  }
+
+  // right collision
+  if (x + width >= canvasWidth) {
+    if (Math.sign(rect.speed.x) === 1) {
+      rect.speed.x = -rect.speed.x;
     }
   }
 }

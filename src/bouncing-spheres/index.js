@@ -46,15 +46,17 @@ function init() {
     { r: 1, g: 62, b: 92 }
   ];
 
-  // create objects
-  for (let i = 0; i <= 250; i++) {
+  // create objects - same number per color
+  const totalSpheres = 250;
+  const totalPerColor = totalSpheres / colors.length;
+  for (let i = 0; i < totalSpheres; i++) {
     const radius = 20;
     canvasObjects.push(
       new Sphere(
         getRandomInt(radius, canvas.width - radius),
         getRandomInt(radius, canvas.height - radius),
         radius,
-        colors[getRandomInt(0, colors.length - 1)]
+        colors[Math.floor(i / totalPerColor)]
       )
     );
   }

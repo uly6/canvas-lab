@@ -1,4 +1,5 @@
 ## canvas-lab
 
 - [blank](./src/blank)
-- [bouncing](./src/bouncing)
+- [bouncing spheres](./src/bouncing-spheres)
+- [bouncing rects](./src/bouncing-rects)
