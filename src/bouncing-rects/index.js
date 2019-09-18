@@ -1,5 +1,22 @@
+import * as dat from "dat.gui";
 import Rect from "./rect";
 import { drawGrid, getRandomInt } from "../utils";
+
+// experiment controller
+const config = {
+  showGrid: false,
+  showCollisionCounters: false,
+  rectWidth: 35,
+  rectHeight: 35,
+  restart: init
+};
+
+const gui = new dat.GUI();
+gui.add(config, "showGrid");
+gui.add(config, "showCollisionCounters");
+gui.add(config, "rectWidth", 10, 50);
+gui.add(config, "rectHeight", 10, 50);
+gui.add(config, "restart");
 
 // canvas context
 const canvas = document.querySelector("canvas");
@@ -49,30 +66,25 @@ function init() {
   // create objects - same number per color
   const total = 250;
   const totalPerColor = total / colors.length;
-  const width = 35;
-  const height = 35;
   for (let i = 0; i < total; i++) {
     canvasObjects.push(
       new Rect(
-        getRandomInt(0, canvas.width - width),
-        getRandomInt(0, canvas.height - height),
-        width,
-        height,
+        getRandomInt(0, canvas.width - config.rectWidth),
+        getRandomInt(0, canvas.height - config.rectHeight),
+        config.rectWidth,
+        config.rectHeight,
         colors[Math.floor(i / totalPerColor)]
       )
     );
   }
-
-  // start animation loop
-  animationLoop(0);
 }
 
 function update(deltaTime) {
   // update all objects on canvas
   for (let canvasOnject of canvasObjects) {
     // update and draw
-    canvasOnject.update(ctx, mouse, canvasObjects);
-    canvasOnject.draw(ctx);
+    canvasOnject.update(ctx, config, mouse, canvasObjects);
+    canvasOnject.draw(ctx, config);
   }
 }
 
@@ -80,8 +92,10 @@ function animationLoop(timestamp) {
   // clean canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // draw grid
-  // drawGrid(ctx);
+  if (config.showGrid) {
+    // draw grid
+    drawGrid(ctx);
+  }
 
   // update canvas objects
   update(timestamp);
@@ -92,3 +106,4 @@ function animationLoop(timestamp) {
 
 // start point
 init();
+animationLoop(0);

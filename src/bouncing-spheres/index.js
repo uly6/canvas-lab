@@ -1,5 +1,20 @@
+import * as dat from "dat.gui";
 import Sphere from "./sphere";
 import { drawGrid, getRandomInt } from "../utils";
+
+// experiment controller
+const config = {
+  showGrid: false,
+  showCollisionCounters: false,
+  radius: 20,
+  restart: init
+};
+
+const gui = new dat.GUI();
+gui.add(config, "showGrid");
+gui.add(config, "showCollisionCounters");
+gui.add(config, "radius", 10, 40);
+gui.add(config, "restart");
 
 // canvas context
 const canvas = document.querySelector("canvas");
@@ -50,27 +65,23 @@ function init() {
   const totalSpheres = 250;
   const totalPerColor = totalSpheres / colors.length;
   for (let i = 0; i < totalSpheres; i++) {
-    const radius = 20;
     canvasObjects.push(
       new Sphere(
-        getRandomInt(radius, canvas.width - radius),
-        getRandomInt(radius, canvas.height - radius),
-        radius,
+        getRandomInt(config.radius, canvas.width - config.radius),
+        getRandomInt(config.radius, canvas.height - config.radius),
+        config.radius,
         colors[Math.floor(i / totalPerColor)]
       )
     );
   }
-
-  // start animation loop
-  animationLoop(0);
 }
 
 function update(deltaTime) {
   // update all objects on canvas
   for (let canvasOnject of canvasObjects) {
     // update and draw
-    canvasOnject.update(ctx, mouse, canvasObjects);
-    canvasOnject.draw(ctx);
+    canvasOnject.update(ctx, config, mouse, canvasObjects);
+    canvasOnject.draw(ctx, config);
   }
 }
 
@@ -78,8 +89,10 @@ function animationLoop(timestamp) {
   // clean canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // draw grid
-  // drawGrid(ctx);
+  if (config.showGrid) {
+    // draw grid
+    drawGrid(ctx);
+  }
 
   // update canvas objects
   update(timestamp);
@@ -90,3 +103,4 @@ function animationLoop(timestamp) {
 
 // start point
 init();
+animationLoop(0);

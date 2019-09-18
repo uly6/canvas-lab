@@ -20,7 +20,7 @@ export default class Sphere {
     this.counter = 0;
   }
 
-  update(ctx, mouse = {}, allObjects = []) {
+  update(ctx, config = {}, mouse = {}, allObjects = []) {
     // borders collision
     sphereBounceOnBorderCollision(ctx, this);
 
@@ -52,7 +52,7 @@ export default class Sphere {
     this.y += this.speed.y;
   }
 
-  draw(ctx) {
+  draw(ctx, config = {}) {
     const { r, g, b } = this.color;
 
     ctx.beginPath();
@@ -61,9 +61,11 @@ export default class Sphere {
     ctx.arc(this.x, this.y - 4, this.radius, Math.PI * 2, false);
     ctx.stroke();
     ctx.fill();
-    ctx.fillStyle = `rgb(${r}, ${g}, ${b}, 1)`;
-    ctx.textAlign = "center";
-    ctx.fillText(this.counter, this.x, this.y, 20);
+    if (config.showCollisionCounters) {
+      ctx.fillStyle = `rgb(${r}, ${g}, ${b}, 1)`;
+      ctx.textAlign = "center";
+      ctx.fillText(this.counter, this.x, this.y, 20);
+    }
     ctx.closePath();
   }
 }

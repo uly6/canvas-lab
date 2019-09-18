@@ -1,4 +1,13 @@
+import * as dat from "dat.gui";
 import { drawGrid, getRandomInt } from "../utils";
+
+// experiment controller
+const config = {
+  showGrid: true
+};
+
+const gui = new dat.GUI();
+gui.add(config, "showGrid");
 
 // canvas context
 const canvas = document.querySelector("canvas");
@@ -62,8 +71,10 @@ function animationLoop(timestamp) {
   // clean canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // draw grid
-  drawGrid(ctx);
+  if (config.showGrid) {
+    // draw grid
+    drawGrid(ctx);
+  }
 
   // update canvas objects
   update(timestamp);

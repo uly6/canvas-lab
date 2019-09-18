@@ -21,7 +21,7 @@ export default class Rect {
     this.counter = 0;
   }
 
-  update(ctx, mouse = {}, allObjects = []) {
+  update(ctx, config = {}, mouse = {}, allObjects = []) {
     // borders collision
     rectBounceOnBorderCollision(ctx, this);
 
@@ -55,20 +55,22 @@ export default class Rect {
     this.y += this.speed.y;
   }
 
-  draw(ctx) {
+  draw(ctx, config = {}) {
     const { r, g, b } = this.color;
 
     ctx.strokeStyle = `rgb(${r}, ${g}, ${b}, 1)`;
     ctx.fillStyle = `rgb(${r}, ${g}, ${b}, ${this.opacity})`;
     ctx.fillRect(this.x, this.y, this.width, this.height);
     ctx.strokeRect(this.x, this.y, this.width, this.height);
-    ctx.fillStyle = `rgb(${r}, ${g}, ${b}, 1)`;
-    ctx.textAlign = "center";
-    ctx.fillText(
-      this.counter,
-      this.x + this.width / 2,
-      this.y + this.height / 2 + 4,
-      20
-    );
+    if (config.showCollisionCounters) {
+      ctx.fillStyle = `rgb(${r}, ${g}, ${b}, 1)`;
+      ctx.textAlign = "center";
+      ctx.fillText(
+        this.counter,
+        this.x + this.width / 2,
+        this.y + this.height / 2 + 4,
+        20
+      );
+    }
   }
 }
